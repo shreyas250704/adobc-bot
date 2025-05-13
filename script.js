@@ -103,7 +103,8 @@ const subSubSchemeDetails = {
     '2': {
       '1': 'मॅट्रिकपूर्व शिष्यवृत्ती: इतर मागासवर्ग, VJNT आणि SBC विद्यार्थ्यांसाठी प्री-मॅट्रिक शिष्यवृत्ती.',
       '2': 'मॅट्रिकोत्तर शिष्यवृत्ती: उच्च शिक्षणासाठी आर्थिक सहाय्य.',
-      '3': 'परदेशात उच्च शिक्षणासाठी शिष्यवृत्ती योजना: परदेशात शिक्षणासाठी आर्थिक मदत.'
+      '3': 'परदेशात उच्च शिक्षणासाठी शिष्यवृत्ती योजना: परदेशात शिक्षणासाठी आर्थिक मदत.',
+      '4': 'भारत सरकार शिष्यवृर्ती अंतर्गत परराज्यात शिक्षण घेणाऱ्या विद्यार्थ्यांना शिष्यवृती (Interstate scholarships).'
     },
     '3': {
       '1': 'जिल्हानिहाय वसतीगृहे: OBC, VJNT आणि SBC विद्यार्थ्यांसाठी जिल्हानिहाय निवास सुविधा.',
@@ -121,6 +122,34 @@ const subSubSchemeDetails = {
     }
   }
 };
+
+const subSubSubSchemes = {
+  '1': { // Main Scheme: Shaikshanik
+    '2': { // Sub Scheme: Scholarship
+      '1': [
+        '1) मॅट्रीकपूर्व शिष्यवृत्ती योजना इ.८ वी ते १० वी मध्ये शिकणाऱ्या विजाभज व विमाप्र मुलींना',
+        '2) इ.८ वी ते १० वी मध्ये शिकणाऱ्या इतर मागास मुलींना सावित्रीबाई फुले शिष्यवृत्ती योजना',
+        '3) माध्यमिक शाळेत शिकत असलेल्या विजाभज/विमाप्र विद्यार्थ्यांना गुणवत्ता शिष्यवृत्ती प्रदान',
+        '4) इयत्ता ५वी ते ७ वी मध्ये शिकणाऱ्या इतर मागास विद्यार्थीनीना सावित्रीबाई फुले शिष्यवृत्ती योजना',
+        '5) सैनिकी शाळेत शिकणाऱ्या विद्यार्थ्यांना शिष्यवृत्ती',
+        '6) माध्यमिक शाळेत शिकत असलेल्या मागासवर्गीय विद्यार्थ्यांना शिष्यवृत्ती (फक्त मुंबईकरीता)',
+        '7) इयत्ता १ ली ते १० मध्ये शिकणाऱ्या विमुक्त जाती व भटक्या जमाती (DNT) विद्यार्थ्यांना'
+      ],
+      '2': [
+        '1. विजाभज विद्यार्थ्यांना मॅट्रिकोत्तर शिष्यवृत्ती (राज्य प्रायोजित)',
+        '2. विजाभज विद्यार्थ्यांना शिक्षण शुल्क आणि परीक्षा शुल्क (राज्य योजना)',
+        '3. इ.१० वी च्या विशेष प्राविण्य व ११वी/१२वी मध्ये शिकणाऱ्यांना राजर्षी शाहू महाराज गुणवत्ता शिष्यवृत्ती (राज्य योजना)',
+        '4. विमाप्र विद्यार्थ्यांना मॅट्रिकोत्तर शिष्यवृत्ती व शिक्षण/परीक्षा शुल्क (राज्य योजना)',
+        '5. व्यावसायिक पाठ्यक्रमाशी संलग्न वसतिगृहातील मागासवर्गीय विद्यार्थ्यांना निवास भत्ता (राज्य योजना)',
+        '6. इमाव विद्यार्थ्यांना मॅट्रिकोत्तर शिष्यवृत्ती (केंद्र योजना), नवीन योजना: OBC, EBC, DNT (60:40)',
+        '7. इमाव विद्यार्थ्यांना मॅट्रिकोत्तर शिष्यवृत्ती (राज्य योजना)',
+        '8. इमाव विद्यार्थ्यांना शिक्षण शुल्क आणि परीक्षा शुल्क (राज्य योजना)',
+        '9. OBC, VJNT, SBC विद्यार्थ्यांसाठी व्यावसायिक प्रशिक्षण शुल्क प्रतिपूर्ती (राज्य योजना)'
+      ]
+    }
+  }
+};
+
 
 // User state to track navigation
 let userState = { step: 'mainSchemes' };
@@ -184,6 +213,16 @@ function sendSubSubSchemesList(mainScheme, subScheme) {
   }
 }
 
+function sendSubSubSubSchemesList(main, sub, subsub) {
+  const list = subSubSubSchemes[main]?.[sub]?.[subsub] || [];
+  if (list.length === 0) {
+    appendMessage('कोणतेही अधिक उपविभाग उपलब्ध नाहीत.\n\nमागील मेन्यूवर परत जाण्यासाठी 0 सह उत्तर द्या.', 'bot');
+  } else {
+    const message = `कृपया पुढील उपश्रेणीमधून निवडा:\n\n0. मागील मेन्यूवर परत जा\n${list.join('\n')}\n\nक्रमांकासह उत्तर द्या (उदा., 1)`;
+    appendMessage(message, 'bot');
+  }
+}
+
 // Handle user input
 function sendMessage(event) {
   event.preventDefault(); // Prevent form submission from reloading the page
@@ -209,35 +248,54 @@ function handleInput(input) {
       appendMessage('कृपया 0 ते 5 मधील एक वैध क्रमांक निवडा.', 'bot');
     }
   } else if (userState.step === 'subSchemes') {
-    const mainScheme = userState.mainScheme;
-    const subSchemesList = subSchemes[mainScheme];
+    const main = userState.mainScheme;
+    const list = subSchemes[main];
     if (input === '0') {
       userState.step = 'mainSchemes';
       delete userState.mainScheme;
       sendMainSchemesList();
-    } else if (/^\d+$/.test(input) && parseInt(input) >= 1 && parseInt(input) <= subSchemesList.length) {
+    } else if (/^\d+$/.test(input) && +input >= 1 && +input <= list.length) {
       userState.step = 'subSubSchemes';
       userState.subScheme = input;
-      sendSubSubSchemesList(mainScheme, input);
+      sendSubSubSchemesList(main, input);
     } else {
-      appendMessage(`कृपया 0 ते ${subSchemesList.length} मधील एक वैध क्रमांक निवडा.`, 'bot');
+      appendMessage(`कृपया 0 ते ${list.length} मधील एक वैध क्रमांक निवडा.`, 'bot');
     }
   } else if (userState.step === 'subSubSchemes') {
-    const mainScheme = userState.mainScheme;
-    const subScheme = userState.subScheme;
-    const subSubSchemesList = subSubSchemes[mainScheme]?.[subScheme] || [];
+    const { mainScheme, subScheme } = userState;
+    const list = subSubSchemes[mainScheme]?.[subScheme] || [];
     if (input === '0') {
       userState.step = 'subSchemes';
       delete userState.subScheme;
       sendSubSchemesList(mainScheme);
-    } else if (subSubSchemesList.length > 0 && /^\d+$/.test(input) && parseInt(input) >= 1 && parseInt(input) <= subSubSchemesList.length) {
-      const details = subSubSchemeDetails[mainScheme]?.[subScheme]?.[input] || 'कोणतेही तपशील उपलब्ध नाहीत.';
-      appendMessage(`${details}\n\nमागील मेन्यूवर परत जाण्यासाठी 0 सह उत्तर द्या.`, 'bot');
+    } else if (/^\d+$/.test(input) && +input >= 1 && +input <= list.length) {
+      userState.subSubScheme = input;
+      if (subSubSubSchemes[mainScheme]?.[subScheme]?.[input]) {
+        userState.step = 'subSubSubSchemes';
+        sendSubSubSubSchemesList(mainScheme, subScheme, input);
+      } else {
+        const detail = subSubSchemeDetails[mainScheme]?.[subScheme]?.[input] || 'कोणतेही तपशील उपलब्ध नाहीत.';
+        appendMessage(`${detail}\n\nमागील मेन्यूवर परत जाण्यासाठी 0 सह उत्तर द्या.`, 'bot');
+      }
     } else {
-      appendMessage(`कृपया 0 ते ${subSubSchemesList.length} मधील एक वैध क्रमांक निवडा.`, 'bot');
+      appendMessage(`कृपया 0 ते ${list.length} मधील एक वैध क्रमांक निवडा.`, 'bot');
+    }
+  } else if (userState.step === 'subSubSubSchemes') {
+    const { mainScheme, subScheme, subSubScheme } = userState;
+    const list = subSubSubSchemes[mainScheme]?.[subScheme]?.[subSubScheme] || [];
+    if (input === '0') {
+      userState.step = 'subSubSchemes';
+      delete userState.subSubScheme;
+      sendSubSubSchemesList(mainScheme, subScheme);
+    } else if (/^\d+$/.test(input) && +input >= 1 && +input <= list.length) {
+      // When details are added, handle here
+      appendMessage(`तपशील लवकरच उपलब्ध होतील.\n\nमागील मेन्यूवर परत जाण्यासाठी 0 सह उत्तर द्या.`, 'bot');
+    } else {
+      appendMessage(`कृपया 0 ते ${list.length} मधील एक वैध क्रमांक निवडा.`, 'bot');
     }
   }
 }
+
 
 
 
