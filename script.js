@@ -163,7 +163,10 @@ function sendSubSchemesList(mainScheme) {
 
 // Display sub-sub-schemes list or details
 function sendSubSubSchemesList(mainScheme, subScheme) {
-  const subSubSchemesList = subSubSchemes[mainScheme]?.[subScheme] || [];
+  const subSubSchemesData = subSubSchemes[mainScheme]?.[subScheme] || [];
+  const subSubSchemesList = Array.isArray(subSubSchemesData)
+    ? subSubSchemesData
+    : Object.values(subSubSchemesData);
   if (subSubSchemesList.length === 0) {
     const details = subSchemeDetails[mainScheme]?.[subScheme] || 'कोणतेही तपशील उपलब्ध नाहीत.';
     appendMessage(`${details}\n\nमागील मेन्यूवर परत जाण्यासाठी 0 सह उत्तर द्या.`, 'bot');
